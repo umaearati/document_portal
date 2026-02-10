@@ -36,10 +36,19 @@ class DocumentComparatorLLM:
             self.log.error("Error in compare_documents", error=str(e))
             raise DocumentPortalException("Error comparing documents", sys)
 
-    def _format_response(self, response_parsed: list[dict]) -> pd.DataFrame: #type: ignore
+    def _format_response(self, response_parsed) -> pd.DataFrame:  # type: ignore
         try:
-            df = pd.DataFrame(response_parsed)
-            return df
+        # Case 1: single dict → one-row DataFrame
+          if isinstance(response_parsed, dict):
+            return pd.DataFrame([response_parsed])
+
+        # Case 2: list of dicts → normal DataFrame
+          if isinstance(response_parsed, list):
+            return pd.DataFrame(response_parsed)
+
+        # Case 3: anything else → force to string
+          return pd.DataFrame([{"response": str(response_parsed)}])
+
         except Exception as e:
-            self.log.error("Error formatting response into DataFrame", error=str(e))
-            DocumentPortalException("Error formatting response", sys)
+          self.log.error("Error formatting response into DataFrame", error=str(e))
+          raise DocumentPortalException("Error formatting response", sys)
