@@ -1,0 +1,72 @@
+{
+  "family": "document_portal",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::385168914157:role/doc_role",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "8192",
+  "containerDefinitions": [
+    {
+      "name": "document-portal-container",
+      "image": "385168914157.dkr.ecr.eu-west-2.amazonaws.com/doc_portal_a",
+      "cpu": 1024,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "name": "document-portal-container-8080-tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "environment": [
+        { "name": "ENV", "value": "production" },
+        { "name": "LLM_PROVIDER", "value": "openai" },
+        { "name": "VECTOR_STORE", "value": "faiss" },
+        { "name": "PII_ENABLED", "value": "true" },
+        { "name": "MAX_INPUT_CHARS", "value": "2000" },
+        { "name": "GUARDRAIL_LLM_ENABLED", "value": "false" },
+        { "name": "PINECONE_INDEX_NAME", "value": "document-portal" },
+        { "name": "PINECONE_CLOUD", "value": "aws" },
+        { "name": "PINECONE_REGION", "value": "us-east-1" },
+        { "name": "LANGFUSE_HOST", "value": "https://cloud.langfuse.com" }
+      ],
+      "secrets": [
+        {
+          "name": "API_KEYS",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9"
+        },
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "postgresql://postgres:postgres@localhost:5432/document_portal"
+        },
+        {
+          "name": "REDIS_URL",
+          "valueFrom": "redis://default:1fvDPPM6GIbP25tv9nBVOzldlG7L7rEF@gauzy-guitar-tulip-18945.db.redis.io:11572"
+        },
+        {
+          "name": "PINECONE_API_KEY",
+          "valueFrom": "pcsk_i3ATA_SSqmBhnhst97BLHLYnzHn28LKwArRg4ApFaZe18TmFMbXq6FAcXiW1t2wRspoHa"
+        },
+        {
+          "name": "LANGFUSE_PUBLIC_KEY",
+          "valueFrom": "pk-lf-260d2c61-cffb-4018-9c67-6ea8034f5a15"
+        },
+        {
+          "name": "LANGFUSE_SECRET_KEY",
+          "valueFrom": "sk-lf-7833d9ad-4701-4d2f-850b-5dec7abedf73"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/document_portal",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-create-group": "true"
+        }
+      }
+    }
+  ]
+}

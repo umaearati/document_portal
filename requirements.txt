@@ -1,0 +1,63 @@
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-core==0.3.72
+langchain-groq==0.3.6
+langchain-google-genai==2.1.8
+faiss-cpu==1.11.0.post1
+fastapi==0.116.1
+uvicorn==0.35.0
+python-dotenv==1.1.1
+python-multipart==0.0.20
+PyMuPDF==1.26.3
+structlog==25.4.0
+docx2txt==0.9
+ipykernel==6.30.0
+streamlit==1.47.1
+pytest==8.4.1
+pypdf==5.8.0
+tiktoken==0.12.0
+cfn-lint
+langchain-openai==0.3.11
+openai==1.109.1
+pandas==2.3.3
+-e .
+
+# ── PostgreSQL ──────────────────────────────────────────────────────────────
+sqlalchemy==2.0.41
+psycopg2-binary==2.9.10
+alembic==1.16.1
+
+# ── Langfuse observability ──────────────────────────────────────────────────
+langfuse==2.60.0
+
+# ── Presidio PII redaction ──────────────────────────────────────────────────
+presidio-analyzer==2.2.358
+presidio-anonymizer==2.2.358
+# spaCy English model — install separately after pip install:
+#   python -m spacy download en_core_web_lg
+
+# ── Redis caching ───────────────────────────────────────────────────────────
+redis==5.2.1
+
+# ── Pinecone vector store ───────────────────────────────────────────────────
+pinecone==6.0.2
+langchain-pinecone==0.2.0
+
+# ── HuggingFace ─────────────────────────────────────────────────────────────
+langchain-huggingface==0.1.2
+huggingface-hub==0.30.2
+transformers==4.51.3
+sentence-transformers==3.4.1
+
+# ── Azure Functions (only needed in infra/azure, not in main app) ───────────
+# azure-functions==1.21.3
+
+# ── Terraform is a binary, not a Python package ─────────────────────────────
+# Install from: https://developer.hashicorp.com/terraform/install
+# ── JWT Authentication ───────────────────────────────────────────────────────
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# ── RAGAS Evaluation ────────────────────────────────────────────────────────
+ragas==0.1.21
+datasets==2.21.0

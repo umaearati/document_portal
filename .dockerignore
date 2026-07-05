@@ -1,0 +1,50 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.git
+.gitignore
+*.log
+logs/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# docker ps
+# docker build -t document_portal .
+# docker run -d -p 8080:8080 --env-file .env --name document_portal document_portal
+# docker start document_portal
+# http://localhost:8080

@@ -1,0 +1,93 @@
+version: "3.9"
+
+# ── Local development stack ─────────────────────────────────────────────────
+#
+#   docker compose up
+#
+#   Services:
+#     postgres  — PostgreSQL 16
+#     redis     — Redis 7 (caching)
+#     app       — Document Portal FastAPI server
+# ────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: document_portal
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # ── App ────────────────────────────────────────────────
+      ENV: production
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+
+      # ── Database ────────────────────────────────────────────
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/document_portal
+
+      # ── Redis ───────────────────────────────────────────────
+      REDIS_URL: redis://redis:6379
+
+      # ── API keys ────────────────────────────────────────────
+      OPENAI_API_KEY:       ${OPENAI_API_KEY}
+      GOOGLE_API_KEY:       ${GOOGLE_API_KEY}
+      GROQ_API_KEY:         ${GROQ_API_KEY}
+      HUGGINGFACE_API_TOKEN: ${HUGGINGFACE_API_TOKEN:-}
+
+      # ── Pinecone ────────────────────────────────────────────
+      PINECONE_API_KEY:    ${PINECONE_API_KEY:-}
+      PINECONE_INDEX_NAME: ${PINECONE_INDEX_NAME:-document-portal}
+      VECTOR_STORE:        ${VECTOR_STORE:-faiss}
+
+      # ── Langfuse ────────────────────────────────────────────
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST:       ${LANGFUSE_HOST:-https://cloud.langfuse.com}
+
+      # ── LangSmith ───────────────────────────────────────────
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
+      LANGCHAIN_API_KEY:    ${LANGCHAIN_API_KEY:-}
+
+      # ── PII + Security ──────────────────────────────────────
+      PII_ENABLED:           "true"
+      MAX_INPUT_CHARS:       "2000"
+      GUARDRAIL_LLM_ENABLED: "false"
+
+volumes:
+  postgres_data:
+  redis_data:
