@@ -39,23 +39,23 @@
         },
         {
           "name": "DATABASE_URL",
-          "valueFrom": "postgresql://postgres:postgres@localhost:5432/document_portal"
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9:DATABASE_URL::"
         },
         {
           "name": "REDIS_URL",
-          "valueFrom": "redis://default:1fvDPPM6GIbP25tv9nBVOzldlG7L7rEF@gauzy-guitar-tulip-18945.db.redis.io:11572"
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9:REDIS_URL::"
         },
         {
           "name": "PINECONE_API_KEY",
-          "valueFrom": "pcsk_i3ATA_SSqmBhnhst97BLHLYnzHn28LKwArRg4ApFaZe18TmFMbXq6FAcXiW1t2wRspoHa"
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9:PINECONE_API_KEY::"
         },
         {
           "name": "LANGFUSE_PUBLIC_KEY",
-          "valueFrom": "pk-lf-260d2c61-cffb-4018-9c67-6ea8034f5a15"
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9:LANGFUSE_PUBLIC_KEY::"
         },
         {
           "name": "LANGFUSE_SECRET_KEY",
-          "valueFrom": "sk-lf-7833d9ad-4701-4d2f-850b-5dec7abedf73"
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:385168914157:secret:apikeys_doc_portal-54BDt9:LANGFUSE_SECRET_KEY::"
         }
       ],
       "logConfiguration": {
